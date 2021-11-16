@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Target: {fileID: 0}
-  damage: 10
+  damage: 100
   particules_Feu: {fileID: 8968816385239438921}
   SpeedMove: 20
 --- !u!1001 &3975102830135825641

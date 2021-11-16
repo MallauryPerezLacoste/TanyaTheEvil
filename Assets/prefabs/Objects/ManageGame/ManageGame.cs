@@ -9,7 +9,14 @@ public class ManageGame : MonoBehaviour
     [SerializeField] private string tagCharacters;
     bool turnToPlay = false;
     public Camera camera;
+    public float time;
 
+    [SerializeField] private GameObject characterSelected;
+    [SerializeField] private GameObject enemySelected;
+    [SerializeField] private anyCharacter.enumAtion chosenAction=anyCharacter.enumAtion.actionNormale;
+    
+
+    [SerializeField]  private bool gameFinished = false;
 
 
     void Start()
@@ -17,15 +24,17 @@ public class ManageGame : MonoBehaviour
         Team0 = new List<GameObject>();
         Team1 = new List<GameObject>();
 
-        getTeams();
+        
         StartCoroutine(game());
-        //StartCoroutine(gameEnd());
     }
 
    
     
-    private void getTeams()
+    private bool getTeams()
     {
+        Team0.Clear();
+        Team1.Clear();
+
         GameObject[] allCharacters = GameObject.FindGameObjectsWithTag(tagCharacters);
         foreach (GameObject character in allCharacters)
         {
@@ -38,22 +47,34 @@ public class ManageGame : MonoBehaviour
                 Team0.Add(character);
             }
         }
+        if (Team0.Count != 0 && Team1.Count!=0) return true;
+        else return false;
     }
 
     private  IEnumerator game()
     {
         yield return 0;
-        Debug.Log("game");
 
-        while (true)
+        while (true && !gameFinished && getTeams())
         {
-            teamToPlay(turnToPlay);
+            Debug.Log("Team " + turnToPlay);
+
+            //Select character to play
             yield return StartCoroutine(selectCharater());
             //select action
-            //select target
+            yield return StartCoroutine(selectAction());
+            Debug.Log("Action"+ chosenAction);
+            //select target selectEnemy()
+            yield return StartCoroutine(selectEnemy());
+            //do action
+            yield return StartCoroutine(doAction());
+            Debug.Log(chosenAction+" Done");
+
             turnToPlay = !turnToPlay;
             yield return 0;
+            
         }
+        yield return StartCoroutine(end());
     }
 
 
@@ -65,50 +86,83 @@ public class ManageGame : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                Debug.Log("Boutton appuyer");
                 Ray ray = camera.ScreenPointToRay(Input.mousePosition);
 
                 if(Physics.Raycast(ray, out RaycastHit hitInfo))
                 {
-                    Debug.Log(hitInfo.collider.gameObject.name);
+                    GameObject objectHit = hitInfo.collider.gameObject;
+                    if (objectHit.tag == tagCharacters)
+                    {
+                        if (objectHit.GetComponent<anyCharacter>().getTeam() == turnToPlay)
+                        {
+                            characterSelected= objectHit;
+                            notDone = false;
+                        }
+                    }
                 }
             }
             yield return 0;
         }
     }
 
-    /*
-    private IEnumerator selectCharater()
+    private IEnumerator selectEnemy()
     {
-        GameObject anycharcter = null;
-        while(anycharcter == null || anycharcter.GetComponent<anyCharacter>().getTeam() != turnToPlay)
-        {
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Physics.Raycast(ray, out hit, Mathf.Infinity);
-            Debug.Log(hit.transform.tag);
+        bool notDone = true;
 
+        while (notDone)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+
+                if (Physics.Raycast(ray, out RaycastHit hitInfo))
+                {
+                    GameObject objectHit = hitInfo.collider.gameObject;
+                    if (objectHit.tag == tagCharacters)
+                    {
+                        if (objectHit.GetComponent<anyCharacter>().getTeam() == !turnToPlay)
+                        {
+                            enemySelected = objectHit.GetComponent<anyCharacter>().getCurrentHexagone();
+                            notDone = false;
+                        }
+                    }
+                }
+            }
             yield return 0;
         }
-        
-
-            yield return 0;
-    }*/
-
-    private void teamToPlay(bool team)
-    {
-        Debug.Log("Team " + team);
     }
 
-    private IEnumerator gameEnd()
+    private IEnumerator selectAction()
     {
-        Team0.Clear();
-        Team1.Clear();
-        getTeams();
-        while (Team0.Count != 0 && Team1.Count != 0)
+        yield return 0;
+    }
+
+    private IEnumerator doAction()
+    {
+        characterSelected.GetComponent<anyCharacter>().setAction(chosenAction);
+        characterSelected.GetComponent<anyCharacter>().setSelectedGameObject(enemySelected);
+        yield return StartCoroutine(action());
+    }
+
+    private IEnumerator action()
+    {
+        characterSelected.GetComponent<anyCharacter>().action();
+        yield return StartCoroutine(actionFinished());
+    }
+
+    private IEnumerator actionFinished()
+    {
+        while (!characterSelected.GetComponent<anyCharacter>().actionFinished)
         {
             yield return 0;
         }
+        yield return new WaitForSeconds(time);
+    }
+
+
+    private IEnumerator end()
+    {
         Debug.Log("End");
+        yield return 0;
     }
 }

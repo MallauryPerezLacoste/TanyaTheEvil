@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class anyCharacter : MonoBehaviour
 {
-    protected enum enumAtion {deplacement,actionNormale,attaqueSpeciale,rien};
+    public enum enumAtion {deplacement,actionNormale,attaqueSpeciale,rien};
 
     //Character stats
     [SerializeField] protected float LifePoints;
@@ -17,14 +17,14 @@ public class anyCharacter : MonoBehaviour
     [SerializeField] protected bool TurnToPlay;
     [SerializeField] protected enumAtion Action;
     [SerializeField] protected GameObject selectedGameObject;
-    [SerializeField] protected bool actionFinished;
+    [SerializeField] public bool actionFinished;
 
     //Emplacement
     [SerializeField] protected GameObject currentHexagone;
     [SerializeField] protected GameObject gameObject_attaqueNormale;
     [SerializeField] protected GameObject gameObject_attaqueSpeciale;
 
-    protected void action()
+    public void action()
     {
         if (StuckUnderFire)
         {
@@ -74,6 +74,8 @@ public class anyCharacter : MonoBehaviour
         currentHexagone = CurrentHexagone;
     }
 
+    public GameObject getCurrentHexagone() { return currentHexagone; }
+
     public void setTeam(bool team)
     {
         Team = team;
@@ -83,4 +85,8 @@ public class anyCharacter : MonoBehaviour
     {
         return Team;
     }
+
+    public void setAction(enumAtion action) { Action = action; }
+
+    public void setSelectedGameObject(GameObject SelectedGameObject) { selectedGameObject = SelectedGameObject; }
 }

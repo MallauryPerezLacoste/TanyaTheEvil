@@ -1003,6 +1003,7 @@ GameObject:
   - component: {fileID: 3356995567850640396}
   - component: {fileID: 5832302586262839837}
   - component: {fileID: 1833731942429267023}
+  - component: {fileID: 4983808098887308893}
   m_Layer: 0
   m_Name: Soldier_German
   m_TagString: AnyCharacter
@@ -1084,6 +1085,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 5832302586262839837}
+--- !u!65 &4983808098887308893
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8566720890187914955}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.6, y: 1.7, z: 0.6}
+  m_Center: {x: 0, y: 0.85, z: 0}
 --- !u!1 &8704672979815148053
 GameObject:
   m_ObjectHideFlags: 0

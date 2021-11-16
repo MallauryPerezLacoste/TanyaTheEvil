@@ -28,7 +28,6 @@ public class GenerateMap : MonoBehaviour
     [SerializeField] string teamFile;
     private int[][] teamMatrix;
 
-    [SerializeField] private GameObject ManageGame;
 
 
 
@@ -56,7 +55,6 @@ public class GenerateMap : MonoBehaviour
         }
 
         generateMap();
-        Instantiate(ManageGame, new Vector3(), new Quaternion());
         Destroy(gameObject);
     }
 

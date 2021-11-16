@@ -48,10 +48,11 @@ public class Soldier : anyCharacter
 
     private IEnumerator die()
     {
+        actionFinished = true;
         soldier_Animation.die();
         yield return StartCoroutine(waitAnimation());
         apresMort();
-        actionFinished = true;
+        
     }
     private IEnumerator Orientation(Vector3 destination)
     {
