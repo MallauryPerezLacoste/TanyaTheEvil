@@ -43,5 +43,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5e25a0a917c45644be2dcff191b6936, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allCharacters: []
+  Team0: []
+  Team1: []
   tagCharacters: AnyCharacter
+  camera: {fileID: 0}
+  time: 0
+  characterSelected: {fileID: 0}
+  enemySelected: {fileID: 0}
+  chosenAction: 1
+  gameFinished: 0

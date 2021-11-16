@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2788345199124643668}
   m_Layer: 0
   m_Name: grenade
-  m_TagString: Untagged
+  m_TagString: weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -96,8 +96,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Target: {fileID: 0}
+  done: 0
   damage: 30
   particules_Explosion: {fileID: 1884440406680037187, guid: 6a3c9410c092d114ebc6c5c57cbfecfd, type: 3}
-  initialSpeed: 0.1
+  initialSpeed: 2
   radius: 5
   offsetDamage: 0

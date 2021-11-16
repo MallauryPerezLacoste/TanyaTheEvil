@@ -101,6 +101,9 @@ public class Soldier : anyCharacter
         yield return StartCoroutine(waitAnimation());
         actionFinished = true;
     }
+
+
+
     private IEnumerator grenade(GameObject target)
     {
         yield return StartCoroutine(Orientation(target.transform.position));

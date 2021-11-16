@@ -7,6 +7,8 @@ TagManager:
   - Support
   - keyMapping
   - AnyCharacter
+  - obstacle
+  - weapon
   layers:
   - Default
   - TransparentFX

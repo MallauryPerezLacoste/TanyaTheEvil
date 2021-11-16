@@ -87,6 +87,7 @@ public class GenerateMap : MonoBehaviour
         {
             GameObject newGround = Instantiate(groundsObjects[groundMatrix[i][j]], newCoodinates,new Quaternion(),newHexagone.transform);
             newHexagone.GetComponent<Hexagone>().Ground = newGround;
+            newGround.GetComponent<obstacle>().currentSupport = newHexagone;
         }
         //new material
         if (materialMatrix[i][j] > -1)

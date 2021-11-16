@@ -29,6 +29,7 @@ public class anyCharacter : MonoBehaviour
         if (StuckUnderFire)
         {
             processStuckUnderFire();
+            return;
         }
         switch (Action)
         {

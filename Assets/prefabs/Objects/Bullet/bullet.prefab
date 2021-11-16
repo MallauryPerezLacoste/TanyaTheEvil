@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3342456398593994649}
   m_Layer: 0
   m_Name: bullet
-  m_TagString: Untagged
+  m_TagString: weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -96,6 +96,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Target: {fileID: 0}
+  done: 0
   damage: 100
   particules_Feu: {fileID: 8968816385239438921}
   SpeedMove: 20

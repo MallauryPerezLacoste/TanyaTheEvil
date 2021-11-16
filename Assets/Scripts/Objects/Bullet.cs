@@ -14,7 +14,10 @@ public class Bullet : weapon
     // Start is called before the first frame update
     void Start()
     {
+        GameObject ground = Target.GetComponent<Hexagone>().Ground;
+        ground.GetComponent<obstacle>().effect(damage);
         applyDamage();
+        
     }
 
     bool once = true;
@@ -48,7 +51,6 @@ public class Bullet : weapon
     {
         animationFeu();
         yield return StartCoroutine(Move(Target.transform.position));
-        
         Destroy(gameObject);
     }
 

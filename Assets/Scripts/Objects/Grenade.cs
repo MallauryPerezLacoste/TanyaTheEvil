@@ -12,16 +12,17 @@ public class Grenade : weapon
 
     
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    bool done=true;
 
     // Update is called once per frame
     void Update()
     {
-        StartCoroutine(grenade());
+        if (done)
+        {
+            StartCoroutine(grenade());
+            done = false;
+        }
+        
     }
     private IEnumerator grenade()
     {
@@ -34,9 +35,9 @@ public class Grenade : weapon
     {
         List<GameObject> listHex = getHexZone();
 
+
         foreach(GameObject g in listHex)
         {
-            
             if (g.GetComponent<Renderer>() != null)
             {
                 g.GetComponent<Renderer>().material.color = new Color(0, 0, 0);
@@ -45,7 +46,7 @@ public class Grenade : weapon
             
             if (g.GetComponent<Hexagone>().Player != null)
             {
-                DamagePlayer(g.GetComponent<Hexagone>().Player, (Target.transform.position - g.transform.position).sqrMagnitude);
+                DamagePlayer(g.GetComponent<Hexagone>().Player, g.GetComponent<Hexagone>().Ground, (Target.transform.position - g.transform.position).sqrMagnitude);
             }
 
             if (g.GetComponent<Hexagone>().Ground != null)
@@ -56,9 +57,11 @@ public class Grenade : weapon
         return;
     }
 
-    private void DamagePlayer(GameObject enemy,float distance)
+    private void DamagePlayer(GameObject enemy,GameObject ground,float distance)
     {
-        float pDamage= (float)(Mathf.Pow((1-distance/radius),3)+ offsetDamage);
+        float tDamage = ground.GetComponent<obstacle>().effect(damage);
+        float pDamage= (float)(Mathf.Pow((1-distance/radius),3)* tDamage + offsetDamage);
+
         enemy.GetComponent<anyCharacter>().set_LifePoints(enemy.GetComponent<anyCharacter>().get_LifePoints() - pDamage);
         effectEnemy(enemy);
     }
@@ -107,7 +110,6 @@ public class Grenade : weapon
                 listeHex.Add(g);
             }
         }
-
         return listeHex;
     }
 }

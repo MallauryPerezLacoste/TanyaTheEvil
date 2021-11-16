@@ -7,6 +7,8 @@ public class ManageGame : MonoBehaviour
     [SerializeField] private List<GameObject> Team0;
     [SerializeField] private List<GameObject> Team1;
     [SerializeField] private string tagCharacters;
+    [SerializeField] private string tagHexagone;
+    [SerializeField] private string tagObstacle;
     bool turnToPlay = false;
     public Camera camera;
     public float time;
@@ -14,7 +16,10 @@ public class ManageGame : MonoBehaviour
     [SerializeField] private GameObject characterSelected;
     [SerializeField] private GameObject enemySelected;
     [SerializeField] private anyCharacter.enumAtion chosenAction=anyCharacter.enumAtion.actionNormale;
-    
+
+    [SerializeField] private GameObject interfaceChooseAction;
+
+
 
     [SerializeField]  private bool gameFinished = false;
 
@@ -26,11 +31,12 @@ public class ManageGame : MonoBehaviour
 
         
         StartCoroutine(game());
+        StartCoroutine(finished());
     }
 
    
     
-    private bool getTeams()
+    private void getTeams()
     {
         Team0.Clear();
         Team1.Clear();
@@ -47,28 +53,32 @@ public class ManageGame : MonoBehaviour
                 Team0.Add(character);
             }
         }
-        if (Team0.Count != 0 && Team1.Count!=0) return true;
-        else return false;
     }
 
     private  IEnumerator game()
     {
         yield return 0;
 
-        while (true && !gameFinished && getTeams())
+        while (true && !gameFinished )
         {
-            Debug.Log("Team " + turnToPlay);
+            Debug.Log("Team " + turnToPlay.ToString()+Time.time);
 
             //Select character to play
             yield return StartCoroutine(selectCharater());
             //select action
             yield return StartCoroutine(selectAction());
-            Debug.Log("Action"+ chosenAction);
-            //select target selectEnemy()
-            yield return StartCoroutine(selectEnemy());
-            //do action
-            yield return StartCoroutine(doAction());
-            Debug.Log(chosenAction+" Done");
+
+            if (chosenAction != anyCharacter.enumAtion.rien)
+            {
+                //select target selectEnemy()
+                yield return StartCoroutine(selectEnemy());
+                //do action
+                yield return StartCoroutine(doAction());
+                //Wait weapon used
+                yield return StartCoroutine(waitWeaponUsed());
+                Debug.Log(chosenAction + " Done");
+            }
+            
 
             turnToPlay = !turnToPlay;
             yield return 0;
@@ -76,6 +86,15 @@ public class ManageGame : MonoBehaviour
         }
         yield return StartCoroutine(end());
     }
+
+    private IEnumerator waitWeaponUsed()
+    {
+        while (GameObject.FindGameObjectsWithTag("weapon").Length > 0)
+        {
+            yield return 0;
+        }
+    }
+
 
 
     private IEnumerator selectCharater()
@@ -126,6 +145,18 @@ public class ManageGame : MonoBehaviour
                             notDone = false;
                         }
                     }
+                    else if (objectHit.tag == tagHexagone)
+                    {
+                        enemySelected = objectHit;
+                        notDone = false;
+                    }
+                    else if (objectHit.tag == tagObstacle)
+                    {
+                        enemySelected = objectHit.GetComponent<obstacle>().currentSupport;
+                        Debug.Log(objectHit.GetComponent<obstacle>().currentSupport.name);
+                        notDone = false;
+                    }
+                    Debug.Log(objectHit.tag);
                 }
             }
             yield return 0;
@@ -134,7 +165,14 @@ public class ManageGame : MonoBehaviour
 
     private IEnumerator selectAction()
     {
-        yield return 0;
+        GameObject chooseAction = Instantiate(interfaceChooseAction, new Vector3(), Quaternion.identity);
+
+        while (!chooseAction.GetComponent<chooseAction>().Selected)
+        {
+            yield return 0;
+        }
+        chosenAction = chooseAction.GetComponent<chooseAction>().chosenAction;
+        Destroy(chooseAction);
     }
 
     private IEnumerator doAction()
@@ -164,5 +202,17 @@ public class ManageGame : MonoBehaviour
     {
         Debug.Log("End");
         yield return 0;
+    }
+
+    private IEnumerator finished()
+    {
+        yield return 0;
+        getTeams();
+        while(Team0.Count!=0 && Team1.Count != 0)
+        {
+            getTeams();
+            yield return 0;
+        }
+        Debug.Log("end");
     }
 }
