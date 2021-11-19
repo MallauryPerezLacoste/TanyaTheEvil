@@ -97,10 +97,23 @@ public class GenerateMap : MonoBehaviour
         //new character
         if (anyCharacterMatrix[i][j] > -1)
         {
-            GameObject newCharacter = Instantiate(charactersList[anyCharacterMatrix[i][j]], newCoodinates, new Quaternion());
+            bool team = Convert.ToBoolean(teamMatrix[i][j]);
+            GameObject newCharacter;
+
+            if (team)
+            {
+                newCharacter = Instantiate(charactersList[anyCharacterMatrix[i][j]], newCoodinates, Quaternion.Euler(0,180,0));
+            }
+            else
+            {
+                newCharacter = Instantiate(charactersList[anyCharacterMatrix[i][j]], newCoodinates, new Quaternion());
+            }
+            
+
+
             newHexagone.GetComponent<Hexagone>().Player = newCharacter;
             newCharacter.GetComponent<anyCharacter>().setCurrentHexagone(newHexagone);
-            newCharacter.GetComponent<anyCharacter>().setTeam(Convert.ToBoolean(teamMatrix[i][j]));
+            newCharacter.GetComponent<anyCharacter>().setTeam(team);
         }
     }
 
